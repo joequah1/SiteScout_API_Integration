@@ -1,0 +1,61 @@
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<!-- Testing --> 
+<script>
+    /*
+    $.ajax({
+        headers : {
+            
+        },
+        url : '',
+        
+    }).done(function (e) {
+        
+    });
+    */
+    
+    var advertiserId = '64817';
+    var audienceId = '49124';
+    var access_token = 'e381f32e36844d32d816c65a73dcaf86';
+    
+    var auth = function () {
+        var req = new XMLHttpRequest();
+        var url = 'https://api.sitescout.com/oauth/token';
+        req.open("POST", url, true);
+
+        req.setRequestHeader('Authorization','Basic bW9iaWxlYWRzLWFwaTpSJkNaOERndWx2NFhi');
+        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        req.setRequestHeader('Accept', 'application/json');
+
+        req.onreadystatechange = function() {
+            if (req.readyState == 4 && req.status == 200) {
+                var resp = JSON.parse(req.responseText);
+                console.log(resp);
+                access_token = resp.access_token;
+                audience();
+            }
+        };
+
+        req.send('grant_type=client_credentials');
+    }
+    
+    var audience = function () {
+        var req2 = new XMLHttpRequest();
+        var url = 'https://api.sitescout.com/advertisers/' + advertiserId + '/datapoints/audience/' + audienceId;
+        //var url = 'https://api.sitescout.com/advertisers/' + advertiserId + '/audiences/48424' ;
+        req2.open("GET", url, true);
+
+        req2.setRequestHeader('Authorization','Bearer ' + access_token);
+
+        req2.onreadystatechange = function() {
+            if (req2.readyState == 4 && req2.status == 200) {
+                var resp = JSON.parse(req2.responseText);
+                console.log(resp);
+            }
+        };
+
+        req2.send();
+    }
+    audience();
+    
+</script>
